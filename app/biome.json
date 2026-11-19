@@ -1,0 +1,58 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.5/schema.json",
+  "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "src/**",
+      "e2e/**",
+      "scripts/**",
+      "vite.config.ts",
+      "vitest.config.ts",
+      "playwright.config.ts",
+      "drizzle.config.ts",
+      "!src/routeTree.gen.ts",
+      "!src/components/ui",
+      "!src/styles.css",
+      "!src/movimento.css",
+      "!e2e/.auth",
+      "!e2e/.dev.log",
+      "!.wrangler",
+      "!worker-configuration.d.ts",
+      "!dist",
+      "!drizzle"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "patterns": [
+              {
+                "group": ["./*", "../*"],
+                "message": "Use o alias `#/` (ex.: `#/lib/email`) em vez de import relativo."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "all"
+    }
+  }
+}

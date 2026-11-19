@@ -1,0 +1,1 @@
+CREATE INDEX `progresso_aula_aberta_idx` ON `progresso_da_aula` (`aula_id`,`aberta_em`);

@@ -1,0 +1,1 @@
+ALTER TABLE `aparencia` ADD `casca` text DEFAULT 'classica' NOT NULL;

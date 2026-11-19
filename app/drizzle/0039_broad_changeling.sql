@@ -1,0 +1,1 @@
+ALTER TABLE `aparencia` ADD `mostrar_comunidade` integer DEFAULT true NOT NULL;

@@ -1,0 +1,19 @@
+{
+  "type": "contract",
+  "trigger": "contractPaid",
+  "product": {
+    "id": 9100,
+    "name": "Produto de Teste",
+    "offer_hash": null,
+    "period": "Mensal"
+  },
+  "client": {
+    "name": "Maria Teste da Silva",
+    "email": "maria.teste@exemplo.test",
+    "cellphone": "11999990000",
+    "document": "00000000000"
+  },
+  "sale": null,
+  "coSeller": [],
+  "contract": null
+}

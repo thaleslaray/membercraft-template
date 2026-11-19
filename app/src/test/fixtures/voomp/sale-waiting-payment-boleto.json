@@ -1,0 +1,27 @@
+{
+  "type": "sale",
+  "trigger": "saleWaitingPayment",
+  "product": {
+    "id": 9101,
+    "name": "Curso de Acessórios",
+    "offer_hash": "abc123",
+    "period": "Mensal"
+  },
+  "client": {
+    "name": "Bia Lima",
+    "email": "bia.lima@exemplo.test",
+    "cellphone": "11977770000",
+    "document": "22222222222"
+  },
+  "sale": {
+    "id": 900003,
+    "status": "waiting_payment",
+    "payment_method": "boleto",
+    "total": 47.0,
+    "available": "2026-11-20",
+    "boleto_url": "#",
+    "boleto_barcode": "#"
+  },
+  "coSeller": [{ "name": "Parceira", "email": "parceira@exemplo.test" }],
+  "contract": null
+}

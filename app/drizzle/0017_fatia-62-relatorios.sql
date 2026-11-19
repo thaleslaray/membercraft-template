@@ -1,0 +1,1 @@
+ALTER TABLE `ajuste_de_aviso` ADD `ligado` integer DEFAULT true NOT NULL;

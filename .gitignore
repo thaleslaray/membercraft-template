@@ -1,0 +1,14 @@
+# Segredos locais (chaves de API) — nunca versionar
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.env
+.env.*
+!.env.example
+
+# Exportações com dados de alunos
+dados-privados/
+
+# Dependências, lixo do sistema e saídas soltas
+node_modules/
+.DS_Store

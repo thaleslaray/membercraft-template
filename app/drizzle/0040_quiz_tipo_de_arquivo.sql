@@ -1,0 +1,1 @@
+ALTER TABLE `pergunta_do_quiz` ADD `aceita` text DEFAULT 'qualquer' NOT NULL;

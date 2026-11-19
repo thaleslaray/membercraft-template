@@ -1,0 +1,193 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Produção (topo) e ambiente de testes (`env.teste`). Bindings NÃO herdam entre ambientes:
+  // por isso cada recurso é repetido em `env.teste`, apontando para o recurso de teste.
+  "name": "escola",
+  // Entrada própria (fetch + scheduled + queue); o `fetch` delega ao server-entry do TanStack Start.
+  "main": "src/server.ts",
+  "compatibility_date": "2026-11-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "upload_source_maps": true,
+
+  // Worker perto do D1 (ENAM): sem isso ele roda no Rio e cada consulta ao banco paga ida e volta até os EUA.
+  // O `env.teste` herda este campo (placement é herdável no wrangler).
+  "placement": { "region": "aws:us-east-1" },
+
+
+  // (O diretório de assets é injetado pelo plugin do Vite.)
+  "assets": { "html_handling": "drop-trailing-slash" },
+
+  // Cron (UTC). Mantenha igual a src/lib/cron-schedules.ts e src/lib/horarios.ts (cron.test.ts confere).
+  "triggers": { "crons": ["0 3 * * *", "0 11 * * *", "*/15 * * * *"] },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "escola",
+      // Produção (ENAM).
+      "database_id": "SEU-DATABASE-ID-AQUI",
+      "migrations_dir": "drizzle"
+    }
+  ],
+
+  "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "escola-arquivos" }],
+
+  "queues": {
+    "producers": [
+      { "binding": "FILA_VOOMP", "queue": "escola-voomp" },
+      { "binding": "FILA_EMAIL", "queue": "escola-email" },
+      { "binding": "FILA_PDF", "queue": "escola-pdf" }
+    ],
+    "consumers": [
+      // Até 3 retentativas, 10 s entre elas; esgotadas, a mensagem vai para a fila de mortos.
+      {
+        "queue": "escola-voomp",
+        "max_retries": 3,
+        "retry_delay": 10,
+        "dead_letter_queue": "escola-mortos"
+      },
+      {
+        "queue": "escola-email",
+        "max_retries": 3,
+        "retry_delay": 10,
+        "dead_letter_queue": "escola-mortos"
+      },
+      {
+        "queue": "escola-pdf",
+        "max_retries": 3,
+        "retry_delay": 10,
+        "dead_letter_queue": "escola-mortos"
+      },
+      // Fila de mortos: só registra no log, sem retentativa.
+      { "queue": "escola-mortos", "max_retries": 0 }
+    ]
+  },
+
+  // Rate limit por IP nos endpoints públicos de escrita: 5 requisições por minuto.
+  "ratelimits": [
+    {
+      "name": "PUBLIC_RATE_LIMIT",
+      "namespace_id": "2001",
+      "simple": { "limit": 5, "period": 60 }
+    },
+    // Escritas autenticadas (comentários, publicações, uploads): 20 por minuto por pessoa.
+    {
+      "name": "ESCRITA",
+      "namespace_id": "2003",
+      "simple": { "limit": 20, "period": 60 }
+    }
+  ],
+
+  // Cloudflare Email Service: sem restrição de destinatário em produção.
+  "send_email": [{ "name": "EMAIL" }],
+
+  "vars": {
+    "AMBIENTE": "producao",
+    "BETTER_AUTH_URL": "https://escola.minhaescola.example",
+    "R2_BUCKET_NAME": "escola-arquivos"
+  },
+
+  // Segredos (valores em .dev.vars local e `--secrets-file` no deploy). A lista só documenta/valida o deploy.
+  "secrets": {
+    "required": [
+      "BETTER_AUTH_SECRET",
+      "VOOMP_WEBHOOK_TOKEN",
+      "HOTMART_CHAVE_DE_CIFRA",
+      "EMAIL_FROM",
+      "R2_ACCOUNT_ID",
+      "R2_ACCESS_KEY_ID",
+      "R2_SECRET_ACCESS_KEY",
+      "RESEND_API_KEY",
+      "PROPRIETARIO_INICIAL"
+    ]
+  },
+
+  "env": {
+    "teste": {
+      "name": "escola-teste",
+      "assets": { "html_handling": "drop-trailing-slash" },
+      "triggers": { "crons": ["0 3 * * *", "0 11 * * *", "*/15 * * * *"] },
+      "observability": { "enabled": true },
+      "upload_source_maps": true,
+
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "escola-teste",
+          "database_id": "SEU-DATABASE-ID-AQUI",
+          "migrations_dir": "drizzle"
+        }
+      ],
+
+      "r2_buckets": [
+        { "binding": "BUCKET", "bucket_name": "escola-teste-arquivos" }
+      ],
+
+      "queues": {
+        "producers": [
+          { "binding": "FILA_VOOMP", "queue": "escola-teste-voomp" },
+          { "binding": "FILA_EMAIL", "queue": "escola-teste-email" },
+          { "binding": "FILA_PDF", "queue": "escola-teste-pdf" }
+        ],
+        "consumers": [
+          {
+            "queue": "escola-teste-voomp",
+            "max_retries": 3,
+            "retry_delay": 10,
+            "dead_letter_queue": "escola-teste-mortos"
+          },
+          {
+            "queue": "escola-teste-email",
+            "max_retries": 3,
+            "retry_delay": 10,
+            "dead_letter_queue": "escola-teste-mortos"
+          },
+          {
+            "queue": "escola-teste-pdf",
+            "max_retries": 3,
+            "retry_delay": 10,
+            "dead_letter_queue": "escola-teste-mortos"
+          },
+          { "queue": "escola-teste-mortos", "max_retries": 0 }
+        ]
+      },
+
+      "ratelimits": [
+        {
+          "name": "PUBLIC_RATE_LIMIT",
+          "namespace_id": "2002",
+          "simple": { "limit": 5, "period": 60 }
+        },
+        {
+          "name": "ESCRITA",
+          "namespace_id": "2004",
+          "simple": { "limit": 20, "period": 60 }
+        }
+      ],
+
+      // No teste, restrinja o envio a e-mails seus com "allowed_destination_addresses".
+      "send_email": [{ "name": "EMAIL" }],
+
+      "vars": {
+        "AMBIENTE": "teste",
+        "BETTER_AUTH_URL": "https://teste.minhaescola.example",
+        "R2_BUCKET_NAME": "escola-teste-arquivos"
+      },
+
+      "secrets": {
+        "required": [
+          "BETTER_AUTH_SECRET",
+          "VOOMP_WEBHOOK_TOKEN",
+          "HOTMART_CHAVE_DE_CIFRA",
+          "EMAIL_FROM",
+          "R2_ACCOUNT_ID",
+          "R2_ACCESS_KEY_ID",
+          "R2_SECRET_ACCESS_KEY",
+          "RESEND_API_KEY",
+      "PROPRIETARIO_INICIAL"
+        ]
+      }
+    }
+  }
+}

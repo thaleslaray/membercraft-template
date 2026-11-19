@@ -1,0 +1,28 @@
+{
+  "data": {
+    "date_next_charge": 1746532800000,
+    "product": {
+      "name": "Curso Exemplo",
+      "id": 9000001,
+      "support_email": "suporte@exemplo.test"
+    },
+    "actual_recurrence_value": 1,
+    "subscriber": {
+      "code": "ABCD1234",
+      "name": "0000000000000000000000000000000000000000000000000000000000000000",
+      "email": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "subscription": {
+      "id": 9000004,
+      "plan": {
+        "name": "Plano Exemplo",
+        "id": 9000003
+      }
+    },
+    "cancellation_date": 1745948018688
+  },
+  "id": "c530d9dd-ab3f-4f60-bece-cb1e9fb4b23c",
+  "creation_date": 1745948018771,
+  "event": "SUBSCRIPTION_CANCELLATION",
+  "version": "2.0.0"
+}

@@ -1,0 +1,26 @@
+#!/bin/sh
+# Hook de pre-commit versionado. Ligado por `npm install` em app/ (script `prepare`)
+# ou à mão com: git config core.hooksPath .githooks
+# Só roda quando há arquivo staged sob app/. O e2e fica de fora (é lento): roda na CI.
+set -e
+
+raiz=$(git rev-parse --show-toplevel)
+
+if ! git diff --cached --name-only | grep -q '^app/'; then
+  exit 0
+fi
+
+cd "$raiz/app"
+
+falhou() {
+  echo "" >&2
+  echo "Commit barrado: '$1' falhou. Corrija o problema e tente de novo." >&2
+  exit 1
+}
+
+echo "pre-commit: biome check..."
+npx biome check || falhou "npx biome check"
+echo "pre-commit: typecheck..."
+npm run typecheck || falhou "npm run typecheck"
+echo "pre-commit: testes..."
+npm test || falhou "npm test"

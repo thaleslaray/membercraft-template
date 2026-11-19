@@ -1,0 +1,8 @@
+﻿ID da venda;Status;Nome do cliente;E-mail;ID do produto;Produto;Código da oferta;Valor
+1001;Pago;Ana Souza;Ana@Exemplo.test;500;Curso Acessórios;;197,00
+1002;Pago;Bia Lima;bia@exemplo.test;500;Curso Acessórios;OF1;197,00
+1003;Reembolsado;Caio Reis;caio@exemplo.test;500;Curso Acessórios;;197,00
+1004;Pago;"Dani ""Dee"" Alves";dani@exemplo.test;999;Produto Sem Ligação;;97,00
+1001;Pago;Ana Souza;ana@exemplo.test;500;Curso Acessórios;;197,00
+;Pago;Sem Id;semid@exemplo.test;500;Curso Acessórios;;10,00
+1005;Pago;Sem Email;;500;Curso Acessórios;;10,00

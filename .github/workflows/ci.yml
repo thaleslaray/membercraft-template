@@ -1,0 +1,69 @@
+# CI da área de membros. Em pull request e push na main: tipos, unidade, build e e2e.
+# Este CI só confere o código (sem publicar). A publicação na sua conta Cloudflare é por sua conta.
+name: ci
+
+on:
+  # push só na main: branch com PR já roda pelo pull_request (antes rodava 2x).
+  push:
+    branches: [main]
+  # Rascunho não roda; roda ao abrir, a cada push e ao marcar "Ready for review".
+  # Mudança só de docs/markdown não roda.
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  # Rodar à mão pela aba Actions ou com `gh workflow run ci`.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Push novo na mesma branch/PR cancela o run anterior (menos minutos gastos).
+# Na main não cancela.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+defaults:
+  run:
+    working-directory: app
+
+jobs:
+  testar:
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      # Valores FICTÍCIOS: o login do e2e lê o código impresso no log do servidor.
+      - name: Criar .dev.vars de teste
+        run: |
+          cat > .dev.vars <<'VARS'
+          BETTER_AUTH_SECRET=ci-segredo-ficticio-0123456789abcdef0123456789abcdef
+          HOTMART_CHAVE_DE_CIFRA=ci-chave-ficticia-da-hotmart-0123456789abcdef
+          VARS
+      - run: npm run check
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e
+        env:
+          CI: 'true'
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-resultados
+          # O .dev.log é oculto: sem isto o upload o ignora e o artefato sai vazio.
+          include-hidden-files: true
+          path: |
+            app/test-results
+            app/e2e/.dev.log
+

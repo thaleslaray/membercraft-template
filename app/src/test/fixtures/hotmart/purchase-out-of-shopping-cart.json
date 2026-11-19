@@ -1,0 +1,42 @@
+{
+  "data": {
+    "offer": {
+      "code": "0rgmjkb1"
+    },
+    "product": {
+      "name": "Curso Exemplo",
+      "id": 9000001,
+      "support_email": "suporte@exemplo.test"
+    },
+    "checkout_country": {
+      "iso": "BR",
+      "name": "Brasil"
+    },
+    "affiliate": true,
+    "buyer": {
+      "ucode": "00000000-0000-4000-8000-000000000007",
+      "email": "aluna7@exemplo.test",
+      "name": "Aluna Exemplo 7",
+      "first_name": "Aluna",
+      "last_name": "Exemplo",
+      "checkout_phone": "11999990000",
+      "checkout_phone_code": "11",
+      "document": "00000000000",
+      "document_type": "CPF",
+      "address": {
+        "country_iso": "BR",
+        "country": "Brasil",
+        "state": "SP",
+        "city": "Cidade",
+        "zipcode": "00000-000",
+        "neighborhood": "Bairro",
+        "address": "Rua Exemplo",
+        "number": "1"
+      }
+    }
+  },
+  "id": "97e982a0-544b-49de-82c3-5524806a17f0",
+  "creation_date": 1745969757734,
+  "event": "PURCHASE_OUT_OF_SHOPPING_CART",
+  "version": "2.0.0"
+}

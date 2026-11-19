@@ -1,0 +1,27 @@
+{
+  "type": "sale",
+  "trigger": "saleChargedback",
+  "product": {
+    "id": 9101,
+    "name": "Curso de Acessórios",
+    "offer_hash": "abc123",
+    "period": "Mensal"
+  },
+  "client": {
+    "name": "Ana Souza",
+    "email": "ana.souza@exemplo.test",
+    "cellphone": "11988880000",
+    "document": "11111111111"
+  },
+  "sale": {
+    "id": 900002,
+    "status": "chargeback",
+    "payment_method": "credit_card",
+    "total": 47.0,
+    "available": "2026-11-20",
+    "boleto_url": "#",
+    "boleto_barcode": "#"
+  },
+  "coSeller": { "name": null, "email": null },
+  "contract": null
+}

@@ -1,0 +1,65 @@
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "#/lib/utils.ts"
+import { Slot } from "radix-ui"
+
+const buttonVariants = cva(
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-[var(--radius-btn)] text-[0.8125rem] leading-5 font-medium whitespace-nowrap pressiona-botao outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 in-data-[casca=lume]:focus-visible:ring-ring in-data-[area=painel]:focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        // No painel da equipe a ação principal é vinho (`--brand`); na área do aluno segue `--primary`.
+        default:
+          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 in-data-[area=painel]:bg-brand in-data-[area=painel]:text-brand-foreground in-data-[area=painel]:hover:bg-brand-hover",
+        destructive:
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",
+        outline:
+          "border border-border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-[2.375rem] px-4 py-2 has-[>svg]:px-3",
+        xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2",
+        lg: "h-12 rounded-md px-5 text-base leading-6 has-[>svg]:px-4",
+        icon: "size-10 [&_svg:not([class*='size-'])]:size-5",
+        "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm": "size-8",
+        "icon-lg": "size-12",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  asChild = false,
+  ...props
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }) {
+  const Comp = asChild ? Slot.Root : "button"
+
+  return (
+    <Comp
+      data-slot="button"
+      data-variant={variant}
+      data-size={size}
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+export { Button, buttonVariants }

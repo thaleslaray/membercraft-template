@@ -1,0 +1,1 @@
+CREATE INDEX `matricula_situacao_expira_idx` ON `matricula` (`situacao`,`expira_em`);

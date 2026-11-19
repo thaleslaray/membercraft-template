@@ -1,0 +1,62 @@
+/* Janela da busca rápida (#100). Nasce do campo do topo (origem da transformação no campo, escala de
+   0,98 a 1 e opacidade em --mov-base) e volta pelo mesmo caminho; no celular cresce a partir da lupa,
+   em --mov-lento. Só transform e opacity animam. A origem vem das variáveis --origem-x/--origem-y. */
+@keyframes busca-abre {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+@keyframes busca-fecha {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+@keyframes busca-abre-celular {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+@keyframes busca-fecha-celular {
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+@keyframes busca-fundo-abre {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes busca-fundo-fecha {
+  to {
+    opacity: 0;
+  }
+}
+
+.busca-janela {
+  transform-origin: var(--origem-x, 50%) var(--origem-y, 0);
+}
+.busca-janela[data-state="open"] {
+  animation: busca-abre-celular var(--mov-lento) var(--mov-saida) both;
+}
+.busca-janela[data-state="closed"] {
+  animation: busca-fecha-celular var(--mov-base) var(--mov-saida) both;
+}
+@media (min-width: 761px) {
+  .busca-janela[data-state="open"] {
+    animation: busca-abre var(--mov-base) var(--mov-saida) both;
+  }
+  .busca-janela[data-state="closed"] {
+    animation: busca-fecha var(--mov-base) var(--mov-saida) both;
+  }
+}
+
+.busca-fundo[data-state="open"] {
+  animation: busca-fundo-abre var(--mov-base) var(--mov-saida) both;
+}
+.busca-fundo[data-state="closed"] {
+  animation: busca-fundo-fecha var(--mov-base) var(--mov-saida) both;
+}

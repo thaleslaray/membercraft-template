@@ -1,0 +1,27 @@
+{
+  "type": "sale",
+  "trigger": "salePaid",
+  "product": {
+    "id": 9100,
+    "name": "Produto de Teste",
+    "offer_hash": null,
+    "period": "Mensal"
+  },
+  "client": {
+    "name": "Maria Teste da Silva",
+    "email": "Maria.Teste@Exemplo.test",
+    "cellphone": "11999990000",
+    "document": "00000000000"
+  },
+  "sale": {
+    "id": 900001,
+    "status": "paid",
+    "payment_method": "credit_card",
+    "total": 47.0,
+    "available": "2026-11-07 10:00:00",
+    "boleto_url": "https://boleto.exemplo.test/900001",
+    "boleto_barcode": "00000000000000000000000000000000000000000000"
+  },
+  "coSeller": [],
+  "contract": null
+}

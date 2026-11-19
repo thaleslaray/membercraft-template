@@ -1,0 +1,1298 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import 'tw-animate-css';
+@import './movimento.css';
+@import './busca-rapida.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Fonte do nome no certificado (dado do modelo, não da interface): a prévia do editor serve o arquivo
+   da própria origem (a CSP não admite outra). Licença em /fontes/OFL.txt. */
+@font-face {
+  font-family: 'Allura';
+  src: url('/fontes/Allura-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------------------------------------------------------------------------
+   TEMAS
+   Dois eixos independentes no <html>:
+     - `data-theme`: o TEMA (estudio | neutro | editorial | brutal), renderizado
+       em __root.tsx a partir da aparência configurada (src/regras/aparencia.ts)
+       e do registro em src/config/themes.ts;
+     - a classe `dark`: o MODO, escrita pelo next-themes (escolha do aluno).
+   Um tema é SÓ tokens. Nenhum componente lê `data-theme`. Se um visual novo
+   precisa mudar a forma de algo, crie um token (como --radius-btn) e deixe o
+   tema definir o valor.
+   Os blocos ficam nesta ordem de propósito: `:root` (Estúdio claro, o padrão),
+   `.dark` (Estúdio escuro), depois cada outro tema claro e `.dark[data-theme=...]`.
+   A cor da marca escolhida pelo Proprietário entra por cima como
+   `html[data-theme]` / `html.dark[data-theme]` (cssDaMarca), só valores de tokens.
+   --------------------------------------------------------------------------- */
+
+/* Estúdio (padrão da Escola): o desenho da área antiga da Memberkit, que a aluna já conhece.
+   Inter, cinzas azulados (slate), conteúdo sobre cinza-claro, cantos de 8 px e nada de sombra; a cor de destaque é a marca
+   (verde por padrão, ou a escolhida na Aparência). É o `:root`: sem `data-theme`, a área já abre assim. */
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #1f4d3a;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #cbd5e1;
+  --ring: #1f4d3a;
+  --surface: #f8fafc;
+  --brand: #1f4d3a;
+  --brand-hover: #173a2c;
+  --brand-foreground: #ffffff;
+  --success: #16a34a;
+  /* Verde (ou oliva) legível como TEXTO: o --success é cor de preenchimento e fica abaixo de 4,5:1 sobre claro. */
+  --success-texto: #15803d;
+  --warning: #d97706;
+  --hero-dot: rgba(30, 41, 59, 0.1);
+  --chart-1: #1f4d3a;
+  --chart-2: #64748b;
+  --chart-3: #d97706;
+  --chart-4: #1e293b;
+  --chart-5: #94a3b8;
+  --radius: 8px;
+  --radius-btn: 6px;
+  --radius-card: 8px;
+  --shadow-btn: none;
+  --shadow-card: none;
+  --body-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --display-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --display-weight: 600;
+  --tracking-display: -0.01em;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #020617;
+  --sidebar-primary: #1f4d3a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(15, 23, 42, 0.1);
+  --sidebar-accent-foreground: rgba(2, 6, 23, 0.7);
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #1f4d3a;
+  --terminal: #1e293b;
+  --terminal-foreground: #f8fafc;
+  --terminal-muted: #94a3b8;
+  /* Destaque amplo do Início (véu sobre a foto + tinta do texto). Valores neutros; o Luz de janela define os seus. */
+  --destaque-veu: #2b2320;
+  /* Quanto do véu sobra na ponta do degradê, junto da capa: menos deixa a capa desfocada aparecer. */
+  --destaque-veu-fim: 60%;
+  /* Capa desfocada atrás do texto, sombra da caixa e botão principal do destaque amplo. */
+  --destaque-desfoque: 0.6;
+  --destaque-moldura: var(--shadow-card);
+  --destaque-botao: var(--destaque-tinta);
+  --destaque-botao-tinta: var(--destaque-veu);
+  /* Hover do botão do destaque amplo no computador (o `hover:opacity-85` de antes, só no fundo). */
+  --destaque-botao-hover: color-mix(in oklab, var(--destaque-botao) 85%, transparent);
+  /* Fundo e sombra do destaque amplo no celular (hoje um cartão; o Ateliê deixa no papel). */
+  --destaque-cel-fundo: var(--card);
+  --destaque-cel-moldura: var(--destaque-moldura);
+  /* Máscara da capa no destaque (amplo do Início e em cartão do curso); só o Ateliê claro esfuma a borda esquerda. */
+  --destaque-capa-mascara: none;
+  --destaque-tinta: #fbf6ee;
+  --destaque-acento: #e9d8b8;
+}
+
+.dark {
+  --background: #111318;
+  --foreground: #f3f4f6;
+  --card: #181b21;
+  --card-foreground: #f3f4f6;
+  --popover: #181b21;
+  --popover-foreground: #f3f4f6;
+  --primary: #7fbf9c;
+  --primary-foreground: #0f241a;
+  --secondary: #1f232a;
+  --secondary-foreground: #f3f4f6;
+  --muted: #1f232a;
+  --muted-foreground: #9ca3af;
+  --accent: #252a32;
+  --accent-foreground: #f3f4f6;
+  --destructive: #f87171;
+  --border: rgba(243, 244, 246, 0.1);
+  --input: rgba(243, 244, 246, 0.16);
+  --ring: #7fbf9c;
+  --surface: #181b21;
+  --brand: #7fbf9c;
+  --brand-hover: #95ccad;
+  --brand-foreground: #0f241a;
+  --hero-dot: rgba(243, 244, 246, 0.1);
+  --chart-1: #7fbf9c;
+  --chart-4: #f3f4f6;
+  --shadow-card: none;
+  --sidebar: #111318;
+  --sidebar-foreground: #d1d5db;
+  --sidebar-primary: #7fbf9c;
+  --sidebar-primary-foreground: #0f241a;
+  --sidebar-accent: #1f232a;
+  --sidebar-accent-foreground: #f3f4f6;
+  --sidebar-border: rgba(243, 244, 246, 0.1);
+  --sidebar-ring: #7fbf9c;
+  --destructive-foreground: #ffffff;
+  --success: #4ade80;
+  --success-texto: #4ade80;
+  --warning: #fbbf24;
+  --terminal: #1f232a;
+  --terminal-foreground: #f3f4f6;
+  --terminal-muted: #9ca3af;
+  --chart-2: #9ca3af;
+  --chart-3: #fbbf24;
+  --chart-5: #6b7280;
+  --shadow-btn: none;
+}
+
+/* Neutro: preto, branco e cinza sem matiz; um único azul como marca.
+   Cantos suaves, nada de sombra. */
+[data-theme='neutro'] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.18 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0 0);
+  --primary: oklch(0.18 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.955 0 0);
+  --secondary-foreground: oklch(0.18 0 0);
+  --muted: oklch(0.955 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.955 0 0);
+  --accent-foreground: oklch(0.18 0 0);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.86 0 0);
+  --ring: oklch(0.54 0.17 255);
+  --surface: oklch(0.965 0 0);
+  --brand: oklch(0.54 0.17 255);
+  --brand-hover: oklch(0.48 0.17 255);
+  --brand-foreground: oklch(0.99 0 0);
+  --terminal: oklch(0.2 0 0);
+  --terminal-foreground: oklch(0.96 0 0);
+  --terminal-muted: oklch(0.6 0 0);
+  --hero-dot: oklch(0.85 0 0);
+  --chart-1: oklch(0.54 0.17 255);
+  --chart-4: oklch(0.18 0 0);
+  --radius: 8px;
+  --radius-btn: 8px;
+  --radius-card: 12px;
+  --shadow-btn: none;
+  --shadow-card: none;
+  --display-weight: 700;
+  --tracking-display: -0.025em;
+  --sidebar: oklch(0.975 0 0);
+  --sidebar-primary: oklch(0.54 0.17 255);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: oklch(0.54 0.17 255);
+}
+
+.dark[data-theme='neutro'] {
+  --background: oklch(0.15 0 0);
+  --foreground: oklch(0.97 0 0);
+  --card: oklch(0.19 0 0);
+  --card-foreground: oklch(0.97 0 0);
+  --popover: oklch(0.19 0 0);
+  --popover-foreground: oklch(0.97 0 0);
+  --primary: oklch(0.97 0 0);
+  --primary-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.25 0 0);
+  --secondary-foreground: oklch(0.97 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.72 0 0);
+  --accent: oklch(0.25 0 0);
+  --accent-foreground: oklch(0.97 0 0);
+  --border: oklch(0.28 0 0);
+  --input: oklch(0.32 0 0);
+  --surface: oklch(0.19 0 0);
+  --brand: oklch(0.6 0.17 255);
+  --brand-hover: oklch(0.55 0.17 255);
+  --terminal: oklch(0.1 0 0);
+  --hero-dot: oklch(0.3 0 0);
+  --chart-4: oklch(0.97 0 0);
+  --sidebar: oklch(0.19 0 0);
+  --sidebar-border: oklch(0.28 0 0);
+}
+
+/* Editorial: papel quente, título em serifa (Fraunces) e terracota.
+   Cantos quase retos, bordas finas. Bom para blog e conteúdo. */
+[data-theme='editorial'] {
+  --background: oklch(0.975 0.009 85);
+  --foreground: oklch(0.2 0.012 60);
+  --card: oklch(0.99 0.005 85);
+  --card-foreground: oklch(0.2 0.012 60);
+  --popover: oklch(0.99 0.005 85);
+  --popover-foreground: oklch(0.2 0.012 60);
+  --primary: oklch(0.2 0.012 60);
+  --primary-foreground: oklch(0.98 0.008 85);
+  --secondary: oklch(0.93 0.014 85);
+  --secondary-foreground: oklch(0.2 0.012 60);
+  --muted: oklch(0.93 0.014 85);
+  --muted-foreground: oklch(0.48 0.02 60);
+  --accent: oklch(0.93 0.014 85);
+  --accent-foreground: oklch(0.2 0.012 60);
+  --border: oklch(0.86 0.015 80);
+  --input: oklch(0.8 0.018 80);
+  --ring: oklch(0.47 0.15 32);
+  --surface: oklch(0.945 0.012 85);
+  --brand: oklch(0.47 0.15 32);
+  --brand-hover: oklch(0.42 0.15 32);
+  --brand-foreground: oklch(0.985 0.008 85);
+  --terminal: oklch(0.24 0.014 60);
+  --terminal-foreground: oklch(0.96 0.01 85);
+  --terminal-muted: oklch(0.65 0.02 70);
+  --hero-dot: oklch(0.82 0.015 80);
+  --chart-1: oklch(0.47 0.15 32);
+  --chart-4: oklch(0.2 0.012 60);
+  --radius: 4px;
+  --radius-btn: 4px;
+  --radius-card: 6px;
+  --shadow-btn: none;
+  --shadow-card: none;
+  --display-font: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --display-weight: 500;
+  --tracking-display: -0.015em;
+  --sidebar: oklch(0.945 0.012 85);
+  --sidebar-primary: oklch(0.47 0.15 32);
+  --sidebar-border: oklch(0.86 0.015 80);
+  --sidebar-ring: oklch(0.47 0.15 32);
+}
+
+.dark[data-theme='editorial'] {
+  --background: oklch(0.17 0.01 60);
+  --foreground: oklch(0.95 0.01 85);
+  --card: oklch(0.21 0.012 60);
+  --card-foreground: oklch(0.95 0.01 85);
+  --popover: oklch(0.21 0.012 60);
+  --popover-foreground: oklch(0.95 0.01 85);
+  --primary: oklch(0.95 0.01 85);
+  --primary-foreground: oklch(0.17 0.01 60);
+  --secondary: oklch(0.26 0.012 60);
+  --secondary-foreground: oklch(0.95 0.01 85);
+  --muted: oklch(0.26 0.012 60);
+  --muted-foreground: oklch(0.7 0.015 80);
+  --accent: oklch(0.26 0.012 60);
+  --accent-foreground: oklch(0.95 0.01 85);
+  --border: oklch(0.3 0.012 60);
+  --input: oklch(0.34 0.012 60);
+  --surface: oklch(0.21 0.012 60);
+  --ring: oklch(0.68 0.14 40);
+  --brand: oklch(0.68 0.14 40);
+  --brand-hover: oklch(0.62 0.14 40);
+  --brand-foreground: oklch(0.15 0.01 60);
+  --terminal: oklch(0.12 0.01 60);
+  --hero-dot: oklch(0.3 0.012 60);
+  --chart-4: oklch(0.95 0.01 85);
+  --sidebar: oklch(0.21 0.012 60);
+  --sidebar-border: oklch(0.3 0.012 60);
+  --sidebar-ring: oklch(0.68 0.14 40);
+}
+
+/* Brutal: branco, preto, amarelo e canto reto. A "sombra" é um deslocamento
+   sólido, e as bordas são pretas. */
+[data-theme='brutal'] {
+  --background: #ffffff;
+  --foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --primary: #111111;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f0f0;
+  --secondary-foreground: #111111;
+  --muted: #f0f0f0;
+  --muted-foreground: #444444;
+  --accent: #f0f0f0;
+  --accent-foreground: #111111;
+  --border: #111111;
+  --input: #111111;
+  --ring: #111111;
+  --surface: #f6f6f6;
+  --brand: oklch(0.86 0.17 95);
+  --brand-hover: oklch(0.8 0.17 95);
+  --brand-foreground: #111111;
+  --terminal: #111111;
+  --terminal-foreground: #ffffff;
+  --terminal-muted: #999999;
+  --hero-dot: #cfcfcf;
+  --chart-1: oklch(0.86 0.17 95);
+  --chart-4: #111111;
+  --radius: 0px;
+  --radius-btn: 0px;
+  --radius-card: 0px;
+  --shadow-btn: 4px 4px 0 #111111;
+  --shadow-card: 4px 4px 0 #111111;
+  --display-weight: 900;
+  --tracking-display: -0.04em;
+  --sidebar: #f6f6f6;
+  --sidebar-primary: #111111;
+  --sidebar-border: #111111;
+  --sidebar-ring: #111111;
+}
+
+.dark[data-theme='brutal'] {
+  --background: #111111;
+  --foreground: #ffffff;
+  --card: #1a1a1a;
+  --card-foreground: #ffffff;
+  --popover: #1a1a1a;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #111111;
+  --secondary: #262626;
+  --secondary-foreground: #ffffff;
+  --muted: #262626;
+  --muted-foreground: #bbbbbb;
+  --accent: #262626;
+  --accent-foreground: #ffffff;
+  --border: #ffffff;
+  --input: #ffffff;
+  --ring: #ffffff;
+  --surface: #1a1a1a;
+  --terminal: #000000;
+  --hero-dot: #3a3a3a;
+  --chart-4: #ffffff;
+  --shadow-btn: 4px 4px 0 #ffffff;
+  --shadow-card: 4px 4px 0 #ffffff;
+  --sidebar: #1a1a1a;
+  --sidebar-primary: #ffffff;
+  --sidebar-border: #ffffff;
+  --sidebar-ring: #ffffff;
+}
+
+/* Creme: a identidade das capas de curso da Helena (creme, café, vinho e oliva), com a cor contida.
+   Fundo creme quente, tinta café, botões café e o vinho só como marca (progresso, item ativo).
+   Títulos em Archivo pesado, cantos generosos e cartões com borda fina bege, sem sombra. */
+[data-theme='creme'] {
+  --background: #fbf7f1;
+  --foreground: #2b2320;
+  --card: #ffffff;
+  --card-foreground: #2b2320;
+  --popover: #ffffff;
+  --popover-foreground: #2b2320;
+  --primary: #2b2320;
+  --primary-foreground: #fbf7f1;
+  --secondary: #f3ece2;
+  --secondary-foreground: #2b2320;
+  --muted: #f3ece2;
+  --muted-foreground: #6f6359;
+  --accent: #f3ece2;
+  --accent-foreground: #2b2320;
+  --border: #ece4d8;
+  --input: #dfd4c4;
+  --ring: #8e2436;
+  --surface: #f6f0e7;
+  --brand: #8e2436;
+  --brand-hover: #761d2d;
+  --brand-foreground: #fbf7f1;
+  --success: #7e8a4a;
+  --success-texto: #5f6b2e;
+  --hero-dot: #e6dccd;
+  --chart-1: #8e2436;
+  --chart-2: #7e8a4a;
+  --chart-3: #c9733a;
+  --chart-4: #2b2320;
+  --chart-5: #b7a999;
+  --radius: 12px;
+  --radius-btn: 999px;
+  --radius-card: 18px;
+  --shadow-btn: none;
+  --shadow-card:
+    0 0 0 1px rgba(43, 35, 32, 0.08), 0 1px 2px rgba(43, 35, 32, 0.05),
+    0 10px 24px -14px rgba(70, 45, 30, 0.22);
+  --display-font: 'Archivo', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --display-weight: 800;
+  --tracking-display: -0.03em;
+  --sidebar: #f6f0e7;
+  --sidebar-foreground: #2b2320;
+  --sidebar-primary: #8e2436;
+  --sidebar-primary-foreground: #fbf7f1;
+  --sidebar-accent: #ece4d8;
+  --sidebar-accent-foreground: #2b2320;
+  --sidebar-border: #ece4d8;
+  --sidebar-ring: #8e2436;
+  --terminal: #2b2320;
+  --terminal-foreground: #fbf7f1;
+  --terminal-muted: #b7a999;
+}
+
+.dark[data-theme='creme'] {
+  --background: #1e1916;
+  --foreground: #efe6da;
+  --card: #26201c;
+  --card-foreground: #efe6da;
+  --popover: #26201c;
+  --popover-foreground: #efe6da;
+  --primary: #efe6da;
+  --primary-foreground: #1e1916;
+  --secondary: #2e2723;
+  --secondary-foreground: #efe6da;
+  --muted: #2e2723;
+  --muted-foreground: #a3968a;
+  --accent: #2e2723;
+  --accent-foreground: #efe6da;
+  --border: rgba(239, 230, 218, 0.1);
+  --input: rgba(239, 230, 218, 0.16);
+  --ring: #d98b97;
+  --surface: #26201c;
+  --brand: #d98b97;
+  --brand-hover: #e3a2ab;
+  --brand-foreground: #1e1916;
+  --success: #b5be7a;
+  --success-texto: #b5be7a;
+  --hero-dot: rgba(239, 230, 218, 0.1);
+  --chart-1: #d98b97;
+  --chart-4: #efe6da;
+  --sidebar: #1e1916;
+  --sidebar-foreground: #d8cdc0;
+  --sidebar-primary: #d98b97;
+  --sidebar-primary-foreground: #1e1916;
+  --sidebar-accent: #2e2723;
+  --sidebar-accent-foreground: #efe6da;
+  --sidebar-border: rgba(239, 230, 218, 0.1);
+  --sidebar-ring: #d98b97;
+  --terminal: #16120f;
+}
+
+/* Luz de janela: o mesmo DNA do Creme, iluminado como uma foto de luz natural. O fundo é areia
+   e as superfícies (cartões) são mais claras que ele, como papel sob a janela; sombra macia e
+   quente nos cartões dá profundidade. No escuro vira "estúdio à noite": café profundo, capas em
+   destaque e um dourado discreto como marca. */
+[data-theme='janela'] {
+  --background: #f6f0e8;
+  --foreground: #2b2320;
+  --card: #fffdf9;
+  --card-foreground: #2b2320;
+  --popover: #fffdf9;
+  --popover-foreground: #2b2320;
+  --primary: #2b2320;
+  --primary-foreground: #fffdf9;
+  --secondary: #ede4d8;
+  --secondary-foreground: #2b2320;
+  --muted: #ede4d8;
+  --muted-foreground: #6f6359;
+  --accent: #ede4d8;
+  --accent-foreground: #2b2320;
+  --border: #e6dccf;
+  --input: #d9cdbd;
+  --ring: #8e2436;
+  --surface: #fffdf9;
+  --brand: #8e2436;
+  --brand-hover: #761d2d;
+  --brand-foreground: #fffdf9;
+  --success: #7e8a4a;
+  --success-texto: #5f6b2e;
+  --hero-dot: #e2d6c6;
+  --chart-1: #8e2436;
+  --chart-2: #7e8a4a;
+  --chart-3: #c9733a;
+  --chart-4: #2b2320;
+  --chart-5: #b7a999;
+  --radius: 14px;
+  --radius-btn: 999px;
+  --radius-card: 20px;
+  --shadow-btn: none;
+  --shadow-card:
+    0 0 0 1px rgba(43, 35, 32, 0.08), 0 1px 2px rgba(43, 35, 32, 0.06),
+    0 12px 28px -16px rgba(70, 45, 30, 0.28);
+  --display-font: 'Archivo', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --display-weight: 800;
+  --tracking-display: -0.03em;
+  --sidebar: #fffdf9;
+  --sidebar-foreground: #2b2320;
+  --sidebar-primary: #8e2436;
+  --sidebar-primary-foreground: #fffdf9;
+  --sidebar-accent: #ede4d8;
+  --sidebar-accent-foreground: #2b2320;
+  --sidebar-border: #e6dccf;
+  --sidebar-ring: #8e2436;
+  --terminal: #2b2320;
+  --terminal-foreground: #fffdf9;
+  --terminal-muted: #b7a999;
+  /* Casca Lume: luz, persiana e destaque amplo (lidos por `[data-casca='lume']` mais abaixo). */
+  --lume-luz: #fffdf9;
+  --lume-persiana: rgba(120, 90, 60, 0.035);
+  --destaque-veu: #2b2320;
+  --destaque-tinta: #fbf6ee;
+  --destaque-acento: #e9d8b8;
+}
+
+.dark[data-theme='janela'] {
+  --background: #1e1916;
+  --foreground: #efe6da;
+  --card: #2a2320;
+  --card-foreground: #efe6da;
+  --popover: #2a2320;
+  --popover-foreground: #efe6da;
+  --primary: #efe6da;
+  --primary-foreground: #1e1916;
+  --secondary: #2f2824;
+  --secondary-foreground: #efe6da;
+  --muted: #2f2824;
+  --muted-foreground: #9c8f84;
+  --accent: #2f2824;
+  --accent-foreground: #efe6da;
+  --border: rgba(239, 230, 218, 0.08);
+  --input: rgba(239, 230, 218, 0.14);
+  --ring: #c9a97a;
+  --surface: #2a2320;
+  --brand: #c9a97a;
+  --brand-hover: #d6ba90;
+  --brand-foreground: #1e1916;
+  --success: #b5be7a;
+  --success-texto: #b5be7a;
+  --hero-dot: rgba(239, 230, 218, 0.08);
+  --chart-1: #c9a97a;
+  --chart-4: #efe6da;
+  --shadow-card:
+    0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.4),
+    0 16px 32px -18px rgba(0, 0, 0, 0.7);
+  --sidebar: #1e1916;
+  --sidebar-foreground: #d8cdc0;
+  --sidebar-primary: #c9a97a;
+  --sidebar-primary-foreground: #1e1916;
+  --sidebar-accent: #2f2824;
+  --sidebar-accent-foreground: #efe6da;
+  --sidebar-border: rgba(239, 230, 218, 0.08);
+  --sidebar-ring: #c9a97a;
+  --terminal: #16120f;
+  --lume-foco-quente: rgba(255, 226, 190, 0.1);
+  --destaque-veu: #14100e;
+  --destaque-tinta: #fbf6ee;
+  --destaque-acento: #e9d8b8;
+}
+
+/* Ateliê: as cores tiradas das próprias capas. O fundo é o papel da ilustração (#faf6ef), então a
+   capa se funde com a página; a marca é o vinho das manchas, "concluído" é a sálvia e o damasco e o
+   rosa ficam para os gráficos e detalhes. O destaque amplo não tem bloco de cor nem caixa: o
+   texto fica no mesmo papel, ao lado da ilustração, como numa página de revista. No escuro, café profundo com a marca num rosa terroso. */
+[data-theme='atelie'] {
+  --background: #faf6ef;
+  --foreground: #2b2320;
+  --card: #fffdf9;
+  --card-foreground: #2b2320;
+  --popover: #fffdf9;
+  --popover-foreground: #2b2320;
+  --primary: #2b2320;
+  --primary-foreground: #fffdf9;
+  --secondary: #f1e9de;
+  --secondary-foreground: #2b2320;
+  --muted: #f1e9de;
+  --muted-foreground: #6f6359;
+  --accent: #f1e9de;
+  --accent-foreground: #2b2320;
+  --border: #e9dfd2;
+  --input: #9a8b7b;
+  --ring: #ab4d4e;
+  --surface: #fffdf9;
+  --brand: #ab4d4e;
+  --brand-hover: #963f41;
+  --brand-foreground: #fffdf9;
+  --success: #aba17a;
+  --success-texto: #6b6440;
+  --hero-dot: #ece2d4;
+  --chart-1: #ab4d4e;
+  --chart-2: #aba17a;
+  --chart-3: #eba16b;
+  --chart-4: #2b2320;
+  --chart-5: #f1b7a9;
+  --radius: 14px;
+  --radius-btn: 999px;
+  --radius-card: 20px;
+  --shadow-btn: none;
+  --shadow-card:
+    0 0 0 1px rgba(43, 35, 32, 0.06), 0 1px 2px rgba(43, 35, 32, 0.05),
+    0 12px 28px -16px rgba(70, 45, 30, 0.24);
+  --display-font: 'Archivo', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --display-weight: 800;
+  --tracking-display: -0.03em;
+  --sidebar: #fffdf9;
+  --sidebar-foreground: #2b2320;
+  --sidebar-primary: #ab4d4e;
+  --sidebar-primary-foreground: #fffdf9;
+  --sidebar-accent: #f1e9de;
+  --sidebar-accent-foreground: #2b2320;
+  --sidebar-border: #e9dfd2;
+  --sidebar-ring: #ab4d4e;
+  --terminal: #2b2320;
+  --terminal-foreground: #fffdf9;
+  --terminal-muted: #b7a999;
+  --destaque-veu: #faf6ef;
+  --destaque-veu-fim: 100%;
+  --destaque-desfoque: 0;
+  --destaque-moldura: var(--shadow-card);
+  /* Igual ao botão do celular (`--botao-principal`): o mesmo vinho nas duas larguras. */
+  --destaque-botao: var(--botao-principal);
+  --destaque-botao-tinta: var(--botao-principal-tinta);
+  --destaque-botao-hover: var(--botao-principal-hover);
+  --destaque-cel-fundo: transparent;
+  --destaque-cel-moldura: var(--capa-moldura);
+  --destaque-capa-mascara: linear-gradient(90deg, transparent, #000 14%);
+  --destaque-tinta: #2b2320;
+  --destaque-acento: #ab4d4e;
+}
+
+.dark[data-theme='atelie'] {
+  --background: #1e1916;
+  --foreground: #efe6da;
+  --card: #2a2320;
+  --card-foreground: #efe6da;
+  --popover: #2a2320;
+  --popover-foreground: #efe6da;
+  --primary: #efe6da;
+  --primary-foreground: #1e1916;
+  --secondary: #2f2824;
+  --secondary-foreground: #efe6da;
+  --muted: #2f2824;
+  --muted-foreground: #a09387;
+  --accent: #2f2824;
+  --accent-foreground: #efe6da;
+  --border: rgba(239, 230, 218, 0.08);
+  --input: rgba(239, 230, 218, 0.14);
+  --ring: #e0a093;
+  --surface: #2a2320;
+  --brand: #e0a093;
+  --brand-hover: #e9b3a8;
+  --brand-foreground: #1e1916;
+  --success: #c2bb8e;
+  --success-texto: #c2bb8e;
+  --hero-dot: rgba(239, 230, 218, 0.08);
+  --chart-1: #e0a093;
+  --chart-4: #efe6da;
+  --shadow-card:
+    0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.4),
+    0 16px 32px -18px rgba(0, 0, 0, 0.7);
+  --sidebar: #1e1916;
+  --sidebar-foreground: #d8cdc0;
+  --sidebar-primary: #e0a093;
+  --sidebar-primary-foreground: #1e1916;
+  --sidebar-accent: #2f2824;
+  --sidebar-accent-foreground: #efe6da;
+  --sidebar-border: rgba(239, 230, 218, 0.08);
+  --sidebar-ring: #e0a093;
+  --terminal: #16120f;
+  --destaque-veu: #1e1916;
+  --destaque-veu-fim: 100%;
+  --destaque-desfoque: 0;
+  --destaque-moldura: none;
+  --destaque-capa-mascara: none;
+  --destaque-tinta: #efe6da;
+  --destaque-acento: #e0a093;
+}
+
+/* Painel da equipe (`/painel` e `/estudio`): o `<html>` ganha `data-area='painel'` (ver `areaDaRota` e
+   `__root.tsx`), então valem também para janelas e gavetas em portal. A área do aluno não tem o
+   atributo e não muda. Só ajustes de contraste do Ateliê; o resto do painel usa os tokens do tema.
+   - `--destructive` do claro: 5,3:1 sobre o papel (o padrão dá 4,48:1).
+   - `--input` do escuro: contorno de campo a 3,5:1 ou mais sobre fundo e cartão (o padrão dá 1,46:1). */
+[data-theme='atelie'][data-area='painel'] {
+  --destructive: #c81e1e;
+}
+.dark[data-theme='atelie'][data-area='painel'] {
+  --input: #857668;
+}
+
+/* Liga os tokens às utilities do Tailwind (bg-brand, text-muted-foreground,
+   font-display, rounded-lg...). */
+@theme inline {
+  --font-sans: var(--body-font);
+  --font-display: var(--display-font);
+  --font-manuscrito: 'Caveat Brush', cursive;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-success: var(--success);
+  --color-success-texto: var(--success-texto);
+  --color-destaque-veu: var(--destaque-veu);
+  --color-destaque-tinta: var(--destaque-tinta);
+  --color-destaque-acento: var(--destaque-acento);
+  --color-warning: var(--warning);
+  --color-terminal: var(--terminal);
+  --color-terminal-foreground: var(--terminal-foreground);
+  --color-terminal-muted: var(--terminal-muted);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  /* Foco de teclado: a cor de foco cheia (3:1 ou mais nos seis temas, claro e escuro), 2 px, afastado 2 px.
+     Componente com foco próprio (campo, aba) sobrescreve com utility. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  html {
+    color-scheme: light;
+    /* A barra do topo é fixa (64 px): o item focado pelo teclado não some debaixo dela. */
+    scroll-padding-top: 4.5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* No celular o pé fixo de abas (4 rem + área segura) não cobre o item focado. */
+  @media (max-width: 760px) {
+    html {
+      scroll-padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+    }
+  }
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  summary,
+  [role='button'],
+  [role='tab'],
+  [role='option'],
+  [role='menuitem'] {
+    touch-action: manipulation;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    margin: 0;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  a {
+    text-underline-offset: 3px;
+  }
+  /* Link no meio do texto, sem classe: o preflight tira o sublinhado e ele some no parágrafo. Botão,
+     item de menu e cartão têm classe, então não entram aqui. */
+  a:not([class]) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+}
+
+/* Rolagem lateral com sinal visível (painel): uma sombra curta aparece na borda que ainda tem
+   conteúdo escondido e some quando a pessoa chega ao fim. Só imagens de fundo: a cor de fundo do
+   elemento fica como está. `--rolagem-fundo` é a cor que cobre a sombra (padrão: o fundo da página). */
+@utility rolagem-com-sinal {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  background-image:
+    linear-gradient(to right, var(--rolagem-fundo, var(--background)) 40%, transparent),
+    linear-gradient(to left, var(--rolagem-fundo, var(--background)) 40%, transparent),
+    radial-gradient(farthest-side at 0 50%, color-mix(in oklab, var(--foreground) 22%, transparent), transparent),
+    radial-gradient(farthest-side at 100% 50%, color-mix(in oklab, var(--foreground) 22%, transparent), transparent);
+  background-position:
+    left center,
+    right center,
+    left center,
+    right center;
+  background-size:
+    2.5rem 100%,
+    2.5rem 100%,
+    0.875rem 100%,
+    0.875rem 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* Título de destaque: fonte, peso e espaçamento vêm do tema. */
+.font-display {
+  font-weight: var(--display-weight);
+}
+
+/* Etiqueta pequena acima de um título, na cor da marca. Em caixa normal: caixa alta com letras
+   espaçadas grita e lê pior. */
+.kicker,
+.island-kicker {
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--brand);
+}
+
+/* O chão da primeira tela: uma grade de pontos que some nas bordas. Marca a
+   dobra por textura, não por outra cor. */
+.hero-ground {
+  background-image: radial-gradient(var(--hero-dot) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 70% 80% at 50% 40%, black 30%, transparent 100%);
+}
+
+.rise-in {
+  animation: rise-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Troca de aba da Comunidade: o conteúdo novo esmaece (tokens de #89). */
+.troca-de-aba {
+  animation: aparecer var(--mov-base) var(--mov-saida) both;
+}
+
+/* Pódio do ranking: o fundo dos cartões cresce uma vez, a partir da base (tokens de #89). */
+.podio-fundo {
+  transform-origin: bottom;
+  animation: podio-cresce var(--mov-lento) var(--mov-saida) both;
+}
+
+@keyframes podio-cresce {
+  from {
+    opacity: 0;
+    transform: scaleY(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* Ponto de pendente (aba Quiz da aula): o ponto fica parado e um halo da mesma cor se abre devagar
+   em volta dele. Chama o olho sem piscar; com movimento reduzido, só o ponto. */
+.ponto-pulsa {
+  position: relative;
+}
+
+.ponto-pulsa::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  opacity: 0;
+  animation: ponto-halo 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ponto-halo {
+  0% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in,
+  .podio-fundo,
+  .ponto-pulsa::after {
+    animation: none;
+  }
+}
+
+/* Prosa (blog, docs, legal): cores dos tokens. */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--brand);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-quotes: var(--muted-foreground);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-hr: var(--border);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+  --tw-prose-pre-bg: var(--terminal);
+  --tw-prose-pre-code: var(--terminal-foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--muted-foreground);
+}
+.prose :where(code):not(:where(pre *))::before,
+.prose :where(code):not(:where(pre *))::after {
+  content: none;
+}
+.prose :where(code):not(:where(pre *)) {
+  background: var(--secondary);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+.prose :where(pre) {
+  border-radius: var(--radius-card);
+}
+
+/* ---------------------------------------------------------------------------
+   CASCA LUME (área do aluno, estilo escolhido em Estúdio › Aparência)
+   Os tokens daqui valem só dentro de `[data-casca='lume']` (a raiz da CascaLume): não vazam para a
+   casca clássica nem para o painel. Cor, fonte e cantos continuam vindo do tema; `--brand` é a cor
+   da marca. Celular = até 760 px, como no protótipo.
+   --------------------------------------------------------------------------- */
+@custom-variant lume-cel (@media (max-width: 760px));
+@custom-variant lume-tela (@media (min-width: 761px));
+/* Alvos de toque de 44 px: celular (até 760 px) ou qualquer tela de toque. */
+@custom-variant toque (@media (max-width: 760px), (pointer: coarse));
+/* Atalhos de teclado só aparecem onde há mouse e teclado. */
+@custom-variant ponteiro-fino (@media (hover: hover) and (pointer: fine));
+/* O contrário: toque ou sem mouse. `not-ponteiro-fino:` sai como `@media not all` (o Tailwind não nega media composta), por isso a variante própria. */
+@custom-variant sem-ponteiro-fino (@media not ((hover: hover) and (pointer: fine)));
+
+[data-casca='lume'] {
+  --pad: clamp(16px, 4vw, 56px);
+  --lume-topo: 58px;
+  --lume-capa: 14px;
+}
+@media (min-width: 761px) {
+  [data-casca='lume'] {
+    --lume-topo: 68px;
+  }
+}
+
+/* Luz de janela na casca Lume: luz natural vinda do alto à direita e sombras finas de persiana
+   cruzando o topo, quase invisíveis. Só no claro; no escuro (estúdio à noite) é um foco quente. As
+   capas dos cartões perdem o contorno e ganham a sombra macia do tema, como fotos sobre a mesa. */
+html[data-theme='janela']:not(.dark) [data-casca='lume'] {
+  background-image:
+    repeating-linear-gradient(115deg, transparent 0 120px, var(--lume-persiana) 120px 190px),
+    radial-gradient(70% 90% at 85% 0%, var(--lume-luz) 0%, transparent 60%);
+  background-size: 760px 760px, 100% 760px;
+  background-position: top right, top;
+  background-repeat: no-repeat;
+}
+html.dark[data-theme='janela'] [data-casca='lume'] {
+  background-image: radial-gradient(45% 60% at 68% 22%, var(--lume-foco-quente) 0%, transparent 70%);
+  background-size: 100% 900px;
+  background-repeat: no-repeat;
+}
+html[data-theme='janela'] [data-casca='lume'] .lume-capa,
+html[data-theme='atelie'] [data-casca='lume'] .lume-capa {
+  box-shadow: var(--capa-moldura, var(--shadow-card));
+  --tw-ring-shadow: 0 0 #0000;
+}
+
+/* ===== Ateliê, página de revista (ver src/CLAUDE.md). Cada área só escreve no seu trecho. ===== */
+
+/* --- Ateliê: Início, cartões e curso --- */
+/* Padrões iguais ao desenho de antes; só o Ateliê muda os valores. */
+:root {
+  /* Sombra (moldura) das capas: cartões das fileiras e capa do destaque em cartão. */
+  --capa-moldura: var(--shadow-card);
+  /* Capa desfocada atrás do destaque em cartão (página do curso). */
+  --destaque-cartao-desfoque: 0.25;
+  /* Botão principal do destaque em cartão (e do destaque amplo no celular). */
+  --botao-principal: var(--foreground);
+  --botao-principal-tinta: var(--background);
+  /* Hover do botão principal: o mesmo `hover:opacity-85` de antes, só no fundo da pílula. */
+  --botao-principal-hover: color-mix(in oklab, var(--botao-principal) 85%, transparent);
+  /* Lista de aulas do curso: tinta do check de concluída, aro do círculo vazio e caixa "Nenhuma aula". */
+  --aula-feita-tinta: var(--background);
+  --aula-aro: color-mix(in oklab, var(--foreground) 15%, transparent);
+  --busca-vazia-sombra: var(--shadow-card);
+  /* Pílulas de módulo na página do curso: a escolhida e as outras. */
+  --modulo-ativo-fundo: var(--foreground);
+  --modulo-ativo-tinta: var(--background);
+  --modulo-ativo-contorno: var(--foreground);
+  --modulo-fundo: var(--card);
+  /* Aula atual (próxima) na lista: bloco de fundo, fio à esquerda e a etiqueta "Próxima aula". */
+  --curso-proxima-fundo: color-mix(in oklab, var(--brand) 10%, transparent);
+  --curso-proxima-marca: transparent;
+  --curso-proxima-etiqueta-fundo: color-mix(in oklab, var(--brand) 15%, transparent);
+  --curso-proxima-etiqueta-tinta: var(--foreground);
+  --curso-proxima-etiqueta-contorno: transparent;
+  /* Botão dentro do texto da aula (`<a class="botao">`): fundo, tinta, hover e raio. */
+  --botao-do-texto: var(--primary);
+  --botao-do-texto-tinta: var(--primary-foreground);
+  --botao-do-texto-hover: color-mix(in oklab, var(--primary) 90%, transparent);
+  --botao-do-texto-raio: var(--radius-lg);
+  /* Título da aula na casca Lume: fonte, tamanho, peso e espaçamento. */
+  --aula-titulo-fonte: var(--display-font);
+  --aula-titulo-tamanho: clamp(24px, 2.6vw, 32px);
+  --aula-titulo-peso: var(--display-weight);
+  --aula-titulo-espaco: -0.02em;
+}
+
+/* Ateliê claro: capa direto no papel, sem moldura nem bloco; vinho só no botão principal e no item
+   ativo, neutro no resto. */
+[data-theme='atelie'] {
+  --capa-moldura: var(--shadow-card);
+  --destaque-cartao-desfoque: 0;
+  --botao-principal: var(--brand);
+  --botao-principal-tinta: var(--brand-foreground);
+  --botao-principal-hover: var(--brand-hover);
+  /* Título da aula em Inter semibold, calmo como o texto que vem embaixo (o Archivo 800 gritava;
+     comparado pelo dono em 17/11/2026 com o Memberkit). */
+  --aula-titulo-fonte: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --aula-titulo-tamanho: clamp(22px, 2vw, 26px);
+  --aula-titulo-peso: 600;
+  --aula-titulo-espaco: -0.01em;
+  /* Sálvia é clara: o check escuro dá mais de 5:1; o aro vazio a 50% passa de 3:1 no papel. */
+  --aula-feita-tinta: var(--foreground);
+  --aula-aro: color-mix(in oklab, var(--foreground) 50%, transparent);
+  --busca-vazia-sombra: none;
+  --modulo-ativo-fundo: transparent;
+  --modulo-ativo-tinta: var(--brand);
+  --modulo-ativo-contorno: var(--brand);
+  --modulo-fundo: transparent;
+  --curso-proxima-fundo: transparent;
+  --curso-proxima-marca: var(--brand);
+  --curso-proxima-etiqueta-fundo: transparent;
+  --curso-proxima-etiqueta-tinta: var(--brand);
+  --curso-proxima-etiqueta-contorno: var(--brand);
+}
+
+/* Ateliê escuro: a capa vira um cartão claro sobre o café, então a moldura volta. */
+.dark[data-theme='atelie'] {
+  --capa-moldura: var(--shadow-card);
+  /* A sálvia do escuro também é clara, mas aqui o texto é creme: o check usa o café do fundo. */
+  --aula-feita-tinta: var(--background);
+}
+
+/* --- fim: Início, cartões e curso --- */
+
+/* --- Ateliê: aula --- */
+
+/* Padrões iguais ao desenho de hoje (cartão do texto, painel "Seu progresso" em caixa, aula atual em bloco).
+   `--materiais-*` são lidos só na casca Lume (`in-data-[casca=lume]`) e `--conclusao-*` só com `cascaLume`. */
+:root {
+  /* Texto da aula sem vídeo. */
+  --aula-texto-fundo: var(--card);
+  --aula-texto-contorno: var(--border);
+  --aula-texto-raio: 1rem;
+  --aula-texto-sombra: var(--shadow-card);
+  --aula-texto-recuo: 1.5rem;
+  --aula-texto-recuo-topo: 1.5rem;
+  --aula-texto-recuo-cel: 1rem;
+  --aula-texto-recuo-cel-topo: 1rem;
+  /* Painel "Seu progresso" e a playlist. */
+  --aula-painel-fundo: var(--card);
+  --aula-painel-contorno: var(--border);
+  --aula-painel-fio: var(--border);
+  --aula-painel-raio: 1rem;
+  --aula-painel-recuo: 1rem;
+  --aula-lista-recuo: 0.5rem;
+  --aula-item-recuo: 0.625rem;
+  --aula-item-hover: color-mix(in oklab, var(--foreground) 6%, transparent);
+  --aula-modulo-hover: color-mix(in oklab, var(--foreground) 4%, transparent);
+  /* Cor do título do módulo ao passar o mouse (herda: igual a hoje). */
+  --aula-modulo-titulo-hover: inherit;
+  --aula-atual-fundo: color-mix(in oklab, var(--brand) 12%, transparent);
+  --aula-atual-tinta: var(--foreground);
+  /* Materiais (compartilhado com a casca clássica). */
+  --materiais-raio: calc(var(--radius) + 4px);
+  --materiais-lado: var(--border);
+  --materiais-recuo: 1rem;
+  /* Botão principal da tela de conclusão (compartilhada com a casca clássica). */
+  --conclusao-botao: var(--primary);
+  --conclusao-botao-tinta: var(--primary-foreground);
+  --conclusao-botao-hover: color-mix(in oklab, var(--primary) 90%, transparent);
+}
+
+/* Ateliê: texto e painel direto no papel. O texto ganha só um fio em cima; o painel, um fio de tinta
+   como cabeçalho de coluna de revista. A aula atual é marcada pelo vinho (círculo e título), sem bloco. */
+[data-theme='atelie'] {
+  --aula-texto-fundo: transparent;
+  --aula-texto-contorno: transparent;
+  --aula-texto-raio: 0;
+  --aula-texto-sombra: none;
+  --aula-texto-recuo: 0;
+  --aula-texto-recuo-topo: 2rem;
+  --aula-texto-recuo-cel: 0;
+  --aula-texto-recuo-cel-topo: 1.5rem;
+  --aula-painel-fundo: transparent;
+  --aula-painel-contorno: transparent;
+  --aula-painel-fio: var(--foreground);
+  --aula-painel-raio: 0;
+  --aula-painel-recuo: 0;
+  /* 3px: o anel de foco do item não é cortado pela borda da lista que rola. */
+  --aula-lista-recuo: 3px;
+  --aula-item-recuo: 0;
+  --aula-item-hover: transparent;
+  --aula-modulo-hover: transparent;
+  --aula-modulo-titulo-hover: var(--brand);
+  --aula-atual-fundo: transparent;
+  --aula-atual-tinta: var(--brand);
+  --materiais-raio: 0;
+  --materiais-lado: transparent;
+  --materiais-recuo: 0;
+  --conclusao-botao: var(--brand);
+  --conclusao-botao-tinta: var(--brand-foreground);
+  --conclusao-botao-hover: var(--brand-hover);
+}
+
+.dark[data-theme='atelie'] {
+  /* No café, o fio de tinta cheio pesa demais: creme a meia força. */
+  --aula-painel-fio: color-mix(in oklab, var(--foreground) 40%, transparent);
+}
+
+/* --- fim: aula --- */
+
+/* --- Ateliê: casca, menus e telas de apoio --- */
+/* Lidos só dentro da casca Lume (variante `in-data-[casca=lume]`, ver `pagina-lume.ts`); o padrão
+   repete o desenho de hoje, então o Luz de janela, o Creme e a casca clássica não mudam. */
+
+/* comunidade, atendimento, vazios */
+:root {
+  /* Ícone da comunidade: o componente grava `--cor-da-comunidade` e `--tinta-da-comunidade` no
+     próprio elemento. O padrão não é declarado aqui (um `var()` em `:root` não enxerga o elemento):
+     sem este token, o ícone usa a cor da comunidade. O tema só precisa definir os dois abaixo. */
+  /* --comunidade-icone-fundo / --comunidade-icone-tinta: definidos no tema que troca a cor. */
+  /* Fundo da linha de leitura sob o mouse (o `hover:bg-accent/40` de hoje) e o sublinhado do título. */
+  --leitura-hover: color-mix(in oklab, var(--accent) 40%, transparent);
+  --leitura-titulo-hover: none;
+  /* Bolha da aluna no Atendimento (fundo, texto e hora). */
+  --bolha-aluna-fundo: var(--primary);
+  --bolha-aluna-tinta: var(--primary-foreground);
+  --bolha-aluna-hora: color-mix(in oklab, var(--primary-foreground) 80%, transparent);
+  /* Tela vazia e página de erro: centradas hoje; à esquerda na régua onde o tema pede. */
+  --vazio-alinha: center;
+  --vazio-texto: center;
+  --vazio-justifica: center;
+}
+
+[data-theme='atelie'] {
+  --comunidade-icone-fundo: var(--muted);
+  --comunidade-icone-tinta: var(--foreground);
+  --leitura-hover: transparent;
+  --leitura-titulo-hover: underline;
+  --vazio-alinha: flex-start;
+  --vazio-texto: left;
+  --vazio-justifica: flex-start;
+}
+
+/* No escuro a bolha da aluna era o bloco mais claro da tela: vira café elevado. */
+.dark[data-theme='atelie'] {
+  --bolha-aluna-fundo: var(--secondary);
+  --bolha-aluna-tinta: var(--foreground);
+  --bolha-aluna-hora: color-mix(in oklab, var(--foreground) 75%, transparent);
+}
+
+:root {
+  /* Listas e cartões de leitura (publicações, resultados, favoritos, certificados, pontos). */
+  --leitura-fundo: var(--card);
+  --leitura-contorno: var(--border);
+  /* O fio de baixo de cada item; no padrão é o próprio contorno. */
+  --leitura-fio: var(--border);
+  /* A sombra do `Card` (shadow-xs). */
+  --leitura-sombra: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  /* Multiplicadores: canto, recuo lateral do texto e vão entre os itens (1 = como hoje). */
+  --leitura-quina: 1;
+  --leitura-recuo: 1;
+  --leitura-vao: 1;
+  /* A ação principal de cada tela e o filtro ativo. */
+  --botao-forte: var(--primary);
+  --botao-forte-tinta: var(--primary-foreground);
+  --botao-forte-hover: color-mix(in oklab, var(--primary) 90%, transparent);
+  /* Ponto de "não lida" e contador do sininho. */
+  --aviso-ponto: var(--primary);
+  --aviso-ponto-tinta: var(--primary-foreground);
+  /* Destino ativo no topo e nas abas do celular. */
+  --destino-ativo: var(--foreground);
+  /* Telas de apoio que hoje ficam centralizadas (Certificados, Favoritos, Pontos, Busca). */
+  --apoio-margem: auto;
+  /* 0 = recuo de hoje (2rem a partir do md); 1 = a régua `--pad` da casca. */
+  --apoio-na-regua: 0;
+  --titulo-apoio-fonte: var(--body-font);
+  --titulo-apoio-peso: 600;
+  --titulo-apoio-tamanho: 1.5rem;
+  --titulo-apoio-altura: 2rem;
+  --titulo-apoio-tracking: normal;
+}
+
+/* Página de revista: leitura direto no papel, separada por espaço e fio; vinho na ação principal,
+   no item ativo e no que é novo; telas de apoio na régua, com o título na fonte de títulos. */
+[data-theme='atelie'] {
+  --leitura-fundo: transparent;
+  --leitura-contorno: transparent;
+  --leitura-fio: var(--border);
+  --leitura-sombra: none;
+  --leitura-quina: 0;
+  --leitura-recuo: 0;
+  --leitura-vao: 0;
+  --botao-forte: var(--brand);
+  --botao-forte-tinta: var(--brand-foreground);
+  --botao-forte-hover: var(--brand-hover);
+  --aviso-ponto: var(--brand);
+  --aviso-ponto-tinta: var(--brand-foreground);
+  --destino-ativo: var(--brand);
+  --apoio-margem: 0;
+  --apoio-na-regua: 1;
+  --titulo-apoio-fonte: var(--display-font);
+  --titulo-apoio-peso: var(--display-weight);
+  --titulo-apoio-tamanho: clamp(1.75rem, 3.2vw, 2.5rem);
+  --titulo-apoio-altura: 1.08;
+  --titulo-apoio-tracking: -0.03em;
+}
+
+/* No escuro o fio do claro some no café: um tom mais aberto separa os itens. */
+.dark[data-theme='atelie'] {
+  --leitura-fio: rgba(239, 230, 218, 0.14);
+}
+
+/* casca: busca, pontos, ranking */
+:root {
+  /* Fundo e nome de quem olha ("Você") nas listas do ranking; o padrão é o desenho de hoje. */
+  --item-ativo-fundo: color-mix(in oklab, var(--accent) 40%, transparent);
+  --item-ativo-nome: currentColor;
+}
+[data-theme='atelie'] {
+  --item-ativo-fundo: transparent;
+  --item-ativo-nome: var(--brand);
+}
+
+/* --- fim: casca, menus e telas de apoio --- */

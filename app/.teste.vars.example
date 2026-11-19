@@ -1,0 +1,25 @@
+# Segredos do ambiente de TESTE (Cloudflare). Copie para .teste.vars (não versionado):
+#   cp .teste.vars.example .teste.vars
+# Sobem com `npm run deploy:teste` (wrangler deploy --env teste --secrets-file .teste.vars).
+# Todas as chaves de `secrets.required` do wrangler.jsonc precisam existir; vazio = desligado.
+#
+# ATENÇÃO: BETTER_AUTH_SECRET é obrigatório e NÃO pode mudar entre deploys:
+# trocar o valor invalida os cookies de sessão e derruba todos os logins.
+
+BETTER_AUTH_SECRET=
+VOOMP_WEBHOOK_TOKEN=
+EMAIL_FROM=
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+RESEND_API_KEY=
+
+# E-mails (#45): sem EMAIL_LISTA_LIBERADA ninguém recebe nada no ambiente de testes.
+# Separe os endereços por vírgula. EMAIL_WEBHOOK_TOKEN autentica o aviso de retorno (bounce) do provedor.
+EMAIL_LISTA_LIBERADA=
+EMAIL_WEBHOOK_TOKEN=
+
+# Hotmart (#129): chave que cifra no D1 as credenciais coladas no painel (AES-GCM). Mínimo de 32 caracteres.
+# Gere com: openssl rand -base64 32. NÃO pode mudar depois de salvas as credenciais (trocar a chave as
+# deixa ilegíveis; cole as credenciais de novo).
+HOTMART_CHAVE_DE_CIFRA=

@@ -1,0 +1,41 @@
+# Segredos LOCAIS. Copie para .dev.vars (não versionado): cp .dev.vars.example .dev.vars
+# Só BETTER_AUTH_SECRET é obrigatório. As outras chaves podem ficar vazias (vazio = desligado).
+# A URL do app NÃO fica aqui: é BETTER_AUTH_URL em wrangler.jsonc (build/deploy). No `npm run dev`
+# o vite.config.ts a deriva da porta (3040). Não defina BETTER_AUTH_URL neste arquivo: ele tem
+# prioridade e quebraria `PORT=... npm run dev`/e2e.
+# Em produção, os mesmos nomes vão num .prod.vars e sobem com `wrangler deploy --secrets-file .prod.vars`.
+
+# Assina os cookies de sessão. Gere com: openssl rand -base64 32
+BETTER_AUTH_SECRET=
+
+# E-mail (opcional). Sem estas duas variáveis, o e-mail aparece no terminal do `npm run dev`.
+# Crie a chave em https://resend.com/api-keys
+RESEND_API_KEY=
+# Remetente, ex.: Meu App <contato@seudominio.com.br>. Precisa ser de domínio verificado no provedor.
+# Vazio com Resend: usa onboarding@resend.dev (só entrega para o e-mail da sua conta Resend).
+EMAIL_FROM=
+
+# Webhook da Voomp: o cabeçalho x-webhook-token das chamadas precisa ser igual a este valor.
+VOOMP_WEBHOOK_TOKEN=
+
+# Credenciais S3 do R2 (só para URL pré-assinada de upload grande; só funciona remoto).
+# Crie em Cloudflare > R2 > Manage API tokens.
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+
+# E-mails (#45). Segredo do aviso de retorno do provedor (bounce): o Resend chama /api/email/retorno com
+# este valor no cabeçalho x-webhook-token. Vazio = o endereço recusa tudo.
+EMAIL_WEBHOOK_TOKEN=
+# Só no ambiente de testes (AMBIENTE=teste): e-mails liberados para receber, separados por vírgula.
+# Fora da lista, nada sai. Sem lista, ninguém recebe.
+EMAIL_LISTA_LIBERADA=
+
+# Hotmart (#129): chave que cifra no D1 as credenciais coladas no painel (AES-GCM). Mínimo de 32 caracteres.
+# Gere com: openssl rand -base64 32. NÃO pode mudar depois de salvas as credenciais (trocar a chave as
+# deixa ilegíveis; cole as credenciais de novo).
+HOTMART_CHAVE_DE_CIFRA=
+
+# E-mail do primeiro Proprietário de uma instalação nova (banco sem Proprietário). Em produção e no
+# teste é segredo do Worker (`wrangler secret put PROPRIETARIO_INICIAL`), nunca no git. Vazio/ausente = regra desligada.
+PROPRIETARIO_INICIAL=

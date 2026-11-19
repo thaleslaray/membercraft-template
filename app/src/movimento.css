@@ -1,0 +1,348 @@
+/* ---------------------------------------------------------------------------
+   MOVIMENTO, MATERIAL E RESPOSTA (#89, seção "Apple Design" da #88)
+   Tokens e utilidades que as telas usam; ninguém inventa duração nem curva.
+     - Durações: rápido 100 ms (toque), base 200 ms (aparecer, esmaecer), lento 380 ms (painéis, troca de tela).
+     - Curva única de saída, sem quique (imita uma mola sem oscilação).
+     - Só `transform` e `opacity` animam; a altura de acordeão usa `grid-template-rows` (0fr → 1fr).
+   Importado por styles.css (depois do Tailwind).
+   --------------------------------------------------------------------------- */
+:root {
+  --mov-rapido: 100ms;
+  --mov-base: 200ms;
+  --mov-lento: 380ms;
+  --mov-saida: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Material translúcido: fundo semitransparente + desfoque; o conteúdo rola por baixo. */
+  --material-opacidade: 72%;
+  --material-desfoque: 20px;
+  --material-saturacao: 180%;
+}
+
+@theme {
+  --ease-saida: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@utility duration-rapido {
+  transition-duration: var(--mov-rapido);
+}
+@utility duration-base {
+  transition-duration: var(--mov-base);
+}
+@utility duration-lento {
+  transition-duration: var(--mov-lento);
+}
+
+/* Pressionado: responde ao toque no instante, sem esperar o `click`. */
+@utility pressiona-botao {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: var(--mov-rapido);
+  transition-timing-function: var(--mov-saida);
+  &:active:not(:disabled, [aria-disabled='true']) {
+    transform: scale(0.97);
+  }
+}
+@utility pressiona-cartao {
+  transition-property: transform;
+  transition-duration: var(--mov-rapido);
+  transition-timing-function: var(--mov-saida);
+  &:active {
+    transform: scale(0.99);
+  }
+}
+/* Linha de lista: fundo no toque, sem mexer no tamanho. */
+@utility pressiona-linha {
+  &:active {
+    background-color: var(--accent);
+  }
+}
+
+/* Material translúcido: `material-barra` (barras do topo e de pé), `material-painel` (painéis e menus). */
+@utility material-barra {
+  background-color: color-mix(in srgb, var(--card) var(--material-opacidade), transparent);
+  backdrop-filter: blur(var(--material-desfoque)) saturate(var(--material-saturacao));
+}
+@utility material-painel {
+  background-color: color-mix(in srgb, var(--popover) 84%, transparent);
+  backdrop-filter: blur(var(--material-desfoque)) saturate(var(--material-saturacao));
+}
+
+/* Menos transparência: superfícies sólidas. Mais contraste: borda definida nas antes translúcidas. */
+@media (prefers-reduced-transparency: reduce) {
+  .material-barra {
+    background-color: var(--card);
+    backdrop-filter: none;
+  }
+  .material-painel {
+    background-color: var(--popover);
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .material-barra,
+  .material-painel {
+    border: 1px solid var(--foreground);
+    background-color: var(--card);
+    backdrop-filter: none;
+  }
+}
+
+/* Bloco recolhível (acordeão, "Mais"): altura por `grid-template-rows`. A transição parte do valor
+   corrente, então interromper no meio reverte dali, sem salto. Fechado fica invisível (e fora da
+   árvore de acessibilidade) com `visibility` atrasada até o fim do recolher. O estado vem do próprio
+   bloco (`data-state` no `.recolhe`) ou do pai direto (`[data-state]` > `.recolhe`): o Radix zera a
+   `transition-duration` inline do seu Content ao abrir/fechar, então a transição mora num filho. */
+.recolhe {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--mov-lento) var(--mov-saida),
+    visibility 0s linear var(--mov-lento);
+}
+.recolhe > .recolhe-miolo {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--mov-base) var(--mov-saida);
+}
+.recolhe[data-state='open'],
+[data-state='open'] > .recolhe {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s, 0s;
+}
+.recolhe[data-state='open'] > .recolhe-miolo,
+[data-state='open'] > .recolhe > .recolhe-miolo {
+  opacity: 1;
+}
+
+/* Carregamento sem pulsar: o esqueleto fica parado e aparece com esmaecimento de 200 ms. */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.esqueleto {
+  animation: aparecer var(--mov-base) var(--mov-saida) both;
+}
+
+/* Troca de tela com direção (View Transitions). O tipo vem de src/lib/troca-de-tela.ts. As barras
+   (topo e abas do pé; a lateral só resta no painel da equipe) têm nome próprio e ficam paradas; só o
+   conteúdo desliza. */
+[data-slot='sidebar-container'] {
+  view-transition-name: barra-lateral;
+}
+header.sticky {
+  view-transition-name: barra-do-topo;
+}
+.abas-do-pe {
+  view-transition-name: abas-do-pe;
+}
+
+/* Troca de modo claro/escuro: esmaecimento de 200 ms sobre a raiz (o padrão do navegador soma as
+   duas camadas, sem salto de brilho). */
+html.trocando-tema::view-transition-old(root),
+html.trocando-tema::view-transition-new(root) {
+  animation-duration: var(--mov-base);
+  animation-timing-function: linear;
+}
+
+/* Barra do topo: esmaecimento curto na borda de baixo, só quando há conteúdo passando por baixo. */
+.barra-do-topo::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  height: 16px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--card) 50%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--mov-base) var(--mov-saida);
+}
+.barra-do-topo[data-sobre='true']::after {
+  opacity: 1;
+}
+
+/* Menu que nasce do próprio botão: origem da transformação no botão (variável do Radix), escala de
+   0,96 a 1 e opacidade em --mov-base; fecha pelo mesmo caminho. */
+@keyframes menu-abre {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@keyframes menu-fecha {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+.menu-nasce {
+  transform-origin: var(
+    --radix-popover-content-transform-origin,
+    var(--radix-dropdown-menu-content-transform-origin)
+  );
+}
+.menu-nasce[data-state='open'] {
+  animation: menu-abre var(--mov-base) var(--mov-saida) both;
+}
+.menu-nasce[data-state='closed'] {
+  animation: menu-fecha var(--mov-base) var(--mov-saida) both;
+}
+::view-transition-group(*) {
+  animation-duration: var(--mov-base);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--mov-lento);
+  animation-timing-function: var(--mov-saida);
+}
+
+@keyframes entra-da-direita {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+@keyframes sai-para-a-esquerda {
+  to {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+@keyframes entra-da-esquerda {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+@keyframes sai-para-a-direita {
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+@keyframes esmaece-entrada {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes esmaece-saida {
+  to {
+    opacity: 0;
+  }
+}
+
+html:active-view-transition-type(avancar) {
+  &::view-transition-old(root) {
+    animation-name: sai-para-a-esquerda;
+  }
+  &::view-transition-new(root) {
+    animation-name: entra-da-direita;
+  }
+}
+html:active-view-transition-type(voltar) {
+  &::view-transition-old(root) {
+    animation-name: sai-para-a-direita;
+    z-index: 1;
+  }
+  &::view-transition-new(root) {
+    animation-name: entra-da-esquerda;
+  }
+}
+html:active-view-transition-type(esmaecer) {
+  &::view-transition-old(root) {
+    animation-name: esmaece-saida;
+    animation-duration: var(--mov-base);
+  }
+  &::view-transition-new(root) {
+    animation-name: esmaece-entrada;
+    animation-duration: var(--mov-base);
+  }
+}
+
+/* A bolha que a aluna acabou de mandar sai do campo de escrever: sobe um pouco e cresce de 0,98 a 1. */
+@keyframes nasce-da-mensagem {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+}
+.nasce-da-mensagem {
+  transform-origin: bottom right;
+  animation: nasce-da-mensagem var(--mov-base) var(--mov-saida) both;
+}
+
+/* Menos movimento: deslizes, escalas e elementos compartilhados viram esmaecimento curto. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mov-rapido: 0ms;
+    --mov-base: 120ms;
+    --mov-lento: 120ms;
+  }
+  .pressiona-botao:active,
+  .pressiona-cartao:active {
+    transform: none;
+  }
+  .recolhe {
+    transition-property: visibility;
+  }
+  .nasce-da-mensagem {
+    animation-name: esmaece-entrada;
+  }
+  html:active-view-transition-type(avancar),
+  html:active-view-transition-type(voltar) {
+    &::view-transition-old(root) {
+      animation-name: esmaece-saida;
+      z-index: auto;
+    }
+    &::view-transition-new(root) {
+      animation-name: esmaece-entrada;
+    }
+  }
+}
+
+/* Certificado grande: cresce a partir da prévia tocada e volta para ela. A origem (`--origem-x/y`) é o
+   centro da prévia relativo ao centro da janela, calculado ao abrir. Só transform e opacity. */
+@keyframes cresce-abre {
+  from {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--origem-x, 0px)), calc(-50% + var(--origem-y, 0px))) scale(0.4);
+  }
+}
+@keyframes cresce-fecha {
+  to {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--origem-x, 0px)), calc(-50% + var(--origem-y, 0px))) scale(0.4);
+  }
+}
+@keyframes esmaece-abre {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes esmaece-fecha {
+  to {
+    opacity: 0;
+  }
+}
+.cresce-da-origem[data-state='open'] {
+  animation: cresce-abre var(--mov-lento) var(--mov-saida) both;
+}
+.cresce-da-origem[data-state='closed'] {
+  animation: cresce-fecha var(--mov-base) var(--mov-saida) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cresce-da-origem[data-state='open'] {
+    animation-name: esmaece-abre;
+  }
+  .cresce-da-origem[data-state='closed'] {
+    animation-name: esmaece-fecha;
+  }
+}

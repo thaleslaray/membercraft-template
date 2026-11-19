@@ -1,0 +1,307 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1794083134711,
+      "tag": "0000_spicy_reaper",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1794087693597,
+      "tag": "0001_fatia-37-perfil-e-termos",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1794088667276,
+      "tag": "0002_fatia-63-aparencia",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1794088898689,
+      "tag": "0003_fatia-38-conteudo",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1794089088174,
+      "tag": "0004_fatia-40-origem-memberkit",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1794091087354,
+      "tag": "0005_fatia-39-turmas-e-matriculas",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1794091306750,
+      "tag": "0006_fatia-49-favoritos",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1794091560286,
+      "tag": "0007_fatia-50-transcricoes",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1794091802307,
+      "tag": "0008_fatia-41-progresso",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1794092108666,
+      "tag": "0009_fatia-43-vendas-da-voomp",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1794092179967,
+      "tag": "0010_fatia-60-banners",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1794092260020,
+      "tag": "0011_fatia-48-avaliacao-da-aula",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1794092339702,
+      "tag": "0012_fatia-45-emails",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1794092445531,
+      "tag": "0013_fatia-51-quiz",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1794092560494,
+      "tag": "0014_fatia-42-regras-de-liberacao",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1794092670037,
+      "tag": "0015_fatia-44-conferencia-de-vendas",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1794093033505,
+      "tag": "0016_fatia-46-sininho",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1794093221048,
+      "tag": "0017_fatia-62-relatorios",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1794093359163,
+      "tag": "0018_fatia-58-atendimento",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1794093441725,
+      "tag": "0019_fatia-64-minha-conta",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1794093507252,
+      "tag": "0020_fatia-52-quiz-entregas",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1794093608407,
+      "tag": "0021_fatia-47-comentarios",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "6",
+      "when": 1794093976187,
+      "tag": "0022_fatia-53-google-forms",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "6",
+      "when": 1794094128588,
+      "tag": "0023_fatia-54-pontos",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1794094253569,
+      "tag": "0024_fatia-59-comunidades",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "6",
+      "when": 1794103629128,
+      "tag": "0025_fatia-55-certificados",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "6",
+      "when": 1794104574426,
+      "tag": "0026_fatia-56-pedido-do-mec",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "6",
+      "when": 1794108507911,
+      "tag": "0027_revisao",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "6",
+      "when": 1794320138729,
+      "tag": "0028_importar-materiais-por-aula",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "6",
+      "when": 1794541369672,
+      "tag": "0029_boas-vindas-da-dany",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1794541372925,
+      "tag": "0030_conta-proxima-aula-sozinha",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1794547327038,
+      "tag": "0031_colegas-da-semana",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "6",
+      "when": 1794587271868,
+      "tag": "0032_eminent_tinkerer",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "6",
+      "when": 1794603007175,
+      "tag": "0033_vendas-por-gateway",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "6",
+      "when": 1794603707897,
+      "tag": "0034_hotmart_credenciais",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "6",
+      "when": 1794605302266,
+      "tag": "0035_conferencia_hotmart",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "6",
+      "when": 1794657064583,
+      "tag": "0036_voomp_ligada",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "6",
+      "when": 1794741104531,
+      "tag": "0037_smooth_piledriver",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "6",
+      "when": 1794936694627,
+      "tag": "0038_brainy_ulik",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "6",
+      "when": 1794937703246,
+      "tag": "0039_broad_changeling",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "6",
+      "when": 1794950931076,
+      "tag": "0040_quiz_tipo_de_arquivo",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "6",
+      "when": 1794997702556,
+      "tag": "0041_quiz_obrigatoria_outro",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "6",
+      "when": 1795103866547,
+      "tag": "0042_quiz_em_conversa",
+      "breakpoints": true
+    }
+  ]
+}

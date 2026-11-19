@@ -1,0 +1,101 @@
+{
+  "data": {
+    "product": {
+      "support_email": "suporte@exemplo.test",
+      "has_co_production": false,
+      "name": "Curso Exemplo",
+      "warranty_date": "2025-04-29T00:00:00Z",
+      "id": 4713431,
+      "ucode": "28ebbbef-5910-49a6-bbe2-64009af31238"
+    },
+    "commissions": [
+      {
+        "currency_value": "BRL",
+        "source": "MARKETPLACE",
+        "value": 12.73
+      },
+      {
+        "currency_value": "BRL",
+        "source": "PRODUCER",
+        "value": 145.76
+      }
+    ],
+    "purchase": {
+      "original_offer_price": {
+        "currency_value": "BRL",
+        "value": 158.49
+      },
+      "recurrence_number": 6,
+      "subscription_anticipation_purchase": false,
+      "checkout_country": {
+        "iso": "BR",
+        "name": "Brasil"
+      },
+      "origin": {
+        "sck": "grupo-dia-5-ea-vitalicio"
+      },
+      "order_bump": {
+        "is_order_bump": false
+      },
+      "approved_date": 1744634364000,
+      "offer": {
+        "code": "37g9evfj"
+      },
+      "is_funnel": false,
+      "order_date": 1744634361000,
+      "date_next_charge": 1746705600000,
+      "price": {
+        "currency_value": "BRL",
+        "value": 158.49
+      },
+      "payment": {
+        "installments_number": 12,
+        "type": "CREDIT_CARD"
+      },
+      "full_price": {
+        "currency_value": "BRL",
+        "value": 158.49
+      },
+      "business_model": "I",
+      "invoice_by": "HOTMART",
+      "transaction": "HP0111784220",
+      "status": "COMPLETED"
+    },
+    "affiliates": [
+      {
+        "affiliate_code": "",
+        "name": ""
+      }
+    ],
+    "producer": {
+      "name": "Produtora Exemplo",
+      "document": "00000000000000",
+      "legal_nature": "Pessoa Jurídica"
+    },
+    "buyer": {
+      "ucode": "00000000-0000-4000-8000-000000000003",
+      "email": "aluna3@exemplo.test",
+      "name": "Aluna Exemplo 3",
+      "first_name": "Aluna",
+      "last_name": "Exemplo",
+      "checkout_phone": "11999990000",
+      "checkout_phone_code": "11",
+      "document": "00000000000",
+      "document_type": "CPF",
+      "address": {
+        "country_iso": "BR",
+        "country": "Brasil",
+        "state": "SP",
+        "city": "Cidade",
+        "zipcode": "00000-000",
+        "neighborhood": "Bairro",
+        "address": "Rua Exemplo",
+        "number": "1"
+      }
+    }
+  },
+  "id": "e5315b29-b88f-4531-9046-49279c4fd9e4",
+  "creation_date": 1745986812612,
+  "event": "PURCHASE_COMPLETE",
+  "version": "2.0.0"
+}

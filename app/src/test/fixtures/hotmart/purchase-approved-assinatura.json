@@ -1,0 +1,107 @@
+{
+  "data": {
+    "product": {
+      "support_email": "suporte@exemplo.test",
+      "has_co_production": false,
+      "name": "Curso Exemplo",
+      "warranty_date": "2025-05-14T00:00:00Z",
+      "id": 4713431,
+      "ucode": "28ebbbef-5910-49a6-bbe2-64009af31238"
+    },
+    "commissions": [
+      {
+        "currency_value": "BRL",
+        "source": "MARKETPLACE",
+        "value": 11.91
+      },
+      {
+        "currency_value": "BRL",
+        "source": "PRODUCER",
+        "value": 135.5
+      }
+    ],
+    "purchase": {
+      "original_offer_price": {
+        "currency_value": "BRL",
+        "value": 147.41
+      },
+      "recurrence_number": 6,
+      "subscription_anticipation_purchase": false,
+      "checkout_country": {
+        "iso": "BR",
+        "name": "Brasil"
+      },
+      "order_bump": {
+        "is_order_bump": false
+      },
+      "approved_date": 1745968363000,
+      "offer": {
+        "code": "e3mkyv25"
+      },
+      "is_funnel": false,
+      "order_date": 1745968241000,
+      "date_next_charge": 1748433600000,
+      "price": {
+        "currency_value": "BRL",
+        "value": 147.41
+      },
+      "payment": {
+        "pix_qrcode": "anonimizado",
+        "pix_expiration_date": 1746141042000,
+        "installments_number": 8,
+        "type": "PIX",
+        "pix_code": "anonimizado"
+      },
+      "full_price": {
+        "currency_value": "BRL",
+        "value": 147.41
+      },
+      "business_model": "I",
+      "invoice_by": "HOTMART",
+      "transaction": "HP1273518985",
+      "status": "APPROVED"
+    },
+    "affiliates": [
+      {
+        "affiliate_code": "",
+        "name": ""
+      }
+    ],
+    "producer": {
+      "name": "Produtora Exemplo",
+      "document": "00000000000000",
+      "legal_nature": "Pessoa Jurídica"
+    },
+    "subscription": {
+      "subscriber": {
+        "code": "CJ1CDOPS"
+      },
+      "status": "ACTIVE"
+    },
+    "buyer": {
+      "ucode": "00000000-0000-4000-8000-000000000002",
+      "email": "aluna2@exemplo.test",
+      "name": "Aluna Exemplo 2",
+      "first_name": "Aluna",
+      "last_name": "Exemplo",
+      "checkout_phone": "11999990000",
+      "checkout_phone_code": "11",
+      "document": "00000000000",
+      "document_type": "CPF",
+      "address": {
+        "country_iso": "BR",
+        "country": "Brasil",
+        "state": "SP",
+        "city": "Cidade",
+        "zipcode": "00000-000",
+        "neighborhood": "Bairro",
+        "address": "Rua Exemplo",
+        "number": "1"
+      }
+    }
+  },
+  "id": "4e5acee9-5030-4fd3-a329-26372374bb60",
+  "creation_date": 1745968366818,
+  "event": "PURCHASE_APPROVED",
+  "version": "2.0.0"
+}

@@ -1,0 +1,1 @@
+ALTER TABLE `configuracao_da_area` ADD `boas_vindas_vimeo` text;

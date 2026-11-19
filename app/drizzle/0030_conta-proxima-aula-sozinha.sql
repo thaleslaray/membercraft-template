@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD `proxima_aula_sozinha` integer DEFAULT true NOT NULL;
