@@ -49,7 +49,36 @@ O `npm install` liga um hook de pre-commit (`.githooks`) que roda lint, tipos e 
 
 Nome da escola, sigla, nome da professora, e-mail de suporte e remetente dos e-mails ficam em `src/config/app.ts`. Troque os valores de exemplo pelos seus. O e-mail de suporte também recebe os alertas técnicos (webhook, e-mail ou tarefa agendada que falhou). Cores e logo se mudam no painel, em Estúdio › Aparência.
 
+## Antes de publicar: o envio de e-mail
+
+**Por que precisa.** No seu computador, o código de entrada aparece no terminal. No sistema publicado, ele chega por e-mail. Sem um serviço de envio de e-mail, ninguém entra, nem você.
+
+**O aviso mais importante.** Publicado sem serviço de e-mail, a tela de entrada diz "Enviamos um código de 6 dígitos" e **nada é enviado**. O erro fica só no registro do sistema. Para ver o motivo, rode `npx wrangler tail`, peça o código de novo e procure "Nenhum provedor de e-mail configurado".
+
+**Os serviços que o sistema aceita** (`src/lib/email.ts`), nesta ordem:
+
+1. **Cloudflare Email Service.** Usa a ligação `EMAIL`, que já está no `wrangler.jsonc`. Só é tentado se `EMAIL_FROM` estiver preenchido, e o endereço precisa ser de um domínio seu na Cloudflare, com o serviço habilitado.
+2. **Resend.** Usa `RESEND_API_KEY`. Entra quando o primeiro falha ou não está configurado.
+
+**Preencha `EMAIL_FROM` sempre**, no formato `Nome <contato@seudominio.com.br>`. Se ficar vazio, o sistema usa o remetente de exemplo de `src/config/app.ts`, que nenhum serviço aceita.
+
+**Sem domínio, só para você entrar e conhecer o sistema:** crie uma conta gratuita em [resend.com](https://resend.com), gere uma chave, preencha `RESEND_API_KEY` e use `EMAIL_FROM=Escola <onboarding@resend.dev>`. Segundo o Resend, esse remetente de teste só entrega para o e-mail da sua própria conta Resend; use nela o mesmo e-mail de `PROPRIETARIO_INICIAL`. Para as alunas receberem o código, você precisa de um domínio.
+
+Nenhum desses caminhos foi **testado por nós com envio real**.
+
+**Três lembretes antes de publicar:**
+
+- Edite `src/config/app.ts` (nome da escola, remetente e e-mail de suporte) **antes** de publicar. Esses textos aparecem nas telas e nos e-mails; sem trocar, o sistema vai ao ar como "Helena Duarte".
+- Crie o arquivo de segredos de produção com `cp .dev.vars.example .prod.vars`. Não parta do `.dev.vars`, que tem o segredo e o e-mail de teste do seu computador.
+- Se você tem mais de uma conta na Cloudflare, fixe a conta antes de qualquer comando: `export CLOUDFLARE_ACCOUNT_ID=<id da conta>`.
+
+Depois de trocar o `database_id` no `wrangler.jsonc`, o banco do seu computador passa a ser outro, vazio. Rode `npm run db:migrate:local` de novo, ou as telas locais dão erro 500.
+
 ## Publicar na sua conta Cloudflare
+
+Este roteiro foi testado numa conta nova da Cloudflare: do zero ao sistema no ar levou cerca de 5 minutos.
+
+**Onde ficam as coisas depois de entrar.** O dono cai em "Meus cursos". O painel de administração abre em "Estúdio da equipe", no menu da conta, ou em `/painel`. Para um curso aparecer para todos, use "Mostrar a todos na vitrine". Para matricular alguém, o curso precisa de uma turma: crie em "Quem compra", "Criar edição separada".
 
 Faça tudo dentro de `app/`.
 

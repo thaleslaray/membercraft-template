@@ -9,7 +9,11 @@ test('Proprietário entra como a aluna, vê a faixa e volta para a própria cont
   const id = unico()
   const dono = `dono-${id}@exemplo.test`
   const aluna = `aluna-${id}@exemplo.test`
-  cadastrarUsuario({ email: dono, perfil: 'proprietario', nome: 'Helena Teste' })
+  cadastrarUsuario({
+    email: dono,
+    perfil: 'proprietario',
+    nome: 'Helena Teste',
+  })
   cadastrarUsuario({ email: aluna, nome: 'Fulana da Silva' })
   await entrarPorCodigo(page, dono)
 

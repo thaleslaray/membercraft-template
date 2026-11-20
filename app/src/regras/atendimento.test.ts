@@ -55,7 +55,12 @@ async function cenario() {
     { id: 'ana', name: 'Ana Souza', email: 'ana@x.test' },
     { id: 'bia', name: 'Bia', email: 'bia@x.test' },
     { id: 'eq', name: 'Carla', email: 'eq@x.test', perfil: 'equipe' },
-    { id: 'dono', name: 'Helena', email: 'dono@x.test', perfil: 'proprietario' },
+    {
+      id: 'dono',
+      name: 'Helena',
+      email: 'dono@x.test',
+      perfil: 'proprietario',
+    },
   ])
   const cursoId = await criarCurso(db, { nome: 'Coloração' })
   const outroCursoId = await criarCurso(db, { nome: 'Corte' })

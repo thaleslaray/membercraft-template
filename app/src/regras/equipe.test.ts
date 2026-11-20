@@ -18,7 +18,12 @@ const agora = () => new Date('2026-06-01T12:00:00Z')
 async function cenario() {
   const db = await criarBancoDeTeste()
   await db.insert(user).values([
-    { id: 'dono', name: 'Helena', email: 'helena@x.test', perfil: 'proprietario' },
+    {
+      id: 'dono',
+      name: 'Helena',
+      email: 'helena@x.test',
+      perfil: 'proprietario',
+    },
     { id: 'eq', name: 'Marina', email: 'marina@x.test', perfil: 'equipe' },
     { id: 'ana', name: 'Ana', email: 'ana@x.test', perfil: 'aluno' },
   ])
